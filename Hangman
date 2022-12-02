@@ -1,0 +1,42 @@
+import random
+import string
+from words import words
+
+def getWord(words):
+    word = random.choice(words)
+    while "-" in word or " " in word:
+        word = random.choice(words)
+
+    return word.upper()
+
+def hangman():
+    word = getWord(words)
+    wordLetters = set(word)
+    alphabets = set(string.ascii_uppercase)
+    usedLetters = set()
+    lives = 6
+
+    while len(wordLetters) > 0 and lives > 0:
+        print("You have ", lives, " left and you have guessed these letters: ", " ".join(usedLetters))
+        wordList = [letter if letter in usedLetters else "-" for letter in word]
+        print("Current word: ", " ".join(wordList))
+
+        userGuess = input("Guess a letter: ").upper()
+        if userGuess in alphabets - usedLetters:
+            usedLetters.add(userGuess)
+            if userGuess in wordLetters:
+                wordLetters.remove(userGuess)
+            else:
+                lives = lives - 1
+                print("letter is not in word")
+        elif userGuess in usedLetters:
+            print("You have already guessed that character. Please guess again")
+        else:
+            print("Not a valid character")
+    if lives == 0:
+        print("sorry you died!")
+    else:
+        print("you guessed the word it was ", word)
+
+
+hangman()
